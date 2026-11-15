@@ -1,0 +1,131 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate theme repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.x"
+
+      - name: Install validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends shellcheck imagemagick jq
+
+      - name: Validate repository structure and theme files
+        run: |
+          set -euo pipefail
+          test -f README.md
+          test -f LICENSE
+          test -f CHANGELOG.md
+          test -f AGENTS.md
+          test -f ASSETS.md
+          test -f colors.toml
+          test -f preview.png
+          test -f preview-unlock.png
+          test -f unlock.png
+          test -d backgrounds
+          test -d backgrounds/intros
+
+          # At least four wallpapers
+          wallpaper_count=$(find backgrounds -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) | wc -l)
+          echo "Wallpaper count: $wallpaper_count"
+          [ "$wallpaper_count" -ge 4 ]
+
+          # Each wallpaper should have a matching intro video
+          missing=0
+          while IFS= read -r img; do
+            base="$(basename "${img%.*}")"
+            if ! ls backgrounds/intros/"$base".* >/dev/null 2>&1; then
+              echo "Missing intro for $img"
+              missing=1
+            fi
+          done < <(find backgrounds -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) | sort)
+          [ "$missing" -eq 0 ]
+
+      - name: Validate asset dimensions and basic image health
+        run: |
+          set -euo pipefail
+          while IFS= read -r img; do
+            identify "$img" >/dev/null
+            dims=$(identify -format '%wx%h' "$img")
+            echo "$img $dims"
+          done < <(find backgrounds -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) | sort)
+
+      - name: Lint shell scripts (if present)
+        run: |
+          set -euo pipefail
+          mapfile -t scripts < <(git ls-files '*.sh' 'scripts/*' 2>/dev/null | sort -u || true)
+          if [ ${#scripts[@]} -gt 0 ]; then
+            for s in "${scripts[@]}"; do
+              if [ -f "$s" ]; then
+                shellcheck "$s"
+              fi
+            done
+          else
+            echo "No shell scripts to lint."
+          fi
+
+      - name: Validate YAML and JSON files
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pyyaml
+          python - <<'PY'
+          import json, pathlib, sys
+          import yaml
+
+          errors = []
+          for p in pathlib.Path('.').rglob('*'):
+              if '.git' in p.parts:
+                  continue
+              if p.suffix == '.json':
+                  try:
+                      json.loads(p.read_text(encoding='utf-8'))
+                  except Exception as e:
+                      errors.append(f'JSON error in {p}: {e}')
+              if p.suffix in ('.yml', '.yaml'):
+                  try:
+                      yaml.safe_load(p.read_text(encoding='utf-8'))
+                  except Exception as e:
+                      errors.append(f'YAML error in {p}: {e}')
+          if errors:
+              print('\n'.join(errors))
+              sys.exit(1)
+          print('YAML/JSON validation passed')
+          PY
+        shell: bash
+
+      - name: Check documentation consistency
+        run: |
+          set -euo pipefail
+          grep -q "Quick install" README.md
+          grep -q "omarchy-theme-install https://github.com/vlaktaks/rundfunk.git" README.md
+          grep -q "ASSETS.md" README.md
+          grep -q "CHANGELOG.md" README.md
+          grep -q "AGENTS.md" README.md
+          grep -q "J.P. Ramackers" README.md
+          grep -q "MIT" README.md
+          grep -q "Unreleased" CHANGELOG.md
+          grep -q "J.P. Ramackers" LICENSE
+          grep -q "backgrounds/" ASSETS.md
+
+      - name: Check for obvious debug artifacts
+        run: |
+          set -euo pipefail
+          ! git ls-files | grep -E '(^|/)\.DS_Store$|\.swp$|\.tmp$|~$' || (echo 'Debug/temp artifacts found' && exit 1)

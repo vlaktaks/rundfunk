@@ -1,0 +1,58 @@
+# Rundfunk — dark Japanese cyberpunk palette for Omarchy
+# Dark graphite base with restrained neon accents (red / cyan / magenta)
+
+accent = "#59d9e6"
+cursor = "#e8f7ff"
+foreground = "#d7dde8"
+background = "#101216"
+selection_foreground = "#0d1014"
+selection_background = "#26313d"
+
+color0 = "#101216"
+color1 = "#ff5c7a"
+color2 = "#7ee787"
+color3 = "#ffd479"
+color4 = "#59d9e6"
+color5 = "#ff6ac1"
+color6 = "#56e6d8"
+color7 = "#c9d1d9"
+color8 = "#3a4352"
+color9 = "#ff7a93"
+color10 = "#9bf0a3"
+color11 = "#ffe08a"
+color12 = "#7be8f2"
+color13 = "#ff8ad1"
+color14 = "#7af2e6"
+color15 = "#f4f8ff"
+
+# Extended template keys (used by Omarchy themed templates where available)
+selection = "#26313d"
+muted = "#3a4352"
+
+dark_background = "#0b0d10"
+darker_background = "#07090b"
+lighter_background = "#181b22"
+
+dark_foreground = "#8b98aa"
+light_foreground = "#e6edf5"
+bright_foreground = "#f4f8ff"
+
+red = "#ff5c7a"
+yellow = "#ffd479"
+orange = "#ff9e64"
+green = "#7ee787"
+cyan = "#56e6d8"
+blue = "#59d9e6"
+magenta = "#ff6ac1"
+brown = "#5c4438"
+
+bright_red = "#ff7a93"
+bright_yellow = "#ffe08a"
+bright_green = "#9bf0a3"
+bright_cyan = "#7af2e6"
+bright_blue = "#7be8f2"
+bright_magenta = "#ff8ad1"
+
+# Hyprland border hints (consumed by templates that support these keys)
+hyprland_active_border = "rgba(d6b45aee)"
+hyprland_inactive_border = "rgba(d6b45a66)"

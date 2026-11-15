@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-_No unreleased changes documented._
+### Fixed
+- Restored `AGENTS.md` reference in `README.md` to satisfy repository documentation consistency checks in CI.
 
 ## [1.0.0] - 2026-04-15
 

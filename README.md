@@ -176,6 +176,7 @@ Additional runtime screenshots captured during local validation are available in
 - `unlock.png`, `preview-unlock.png`, `preview.png` — lock/preview assets
 - `ASSETS.md` — asset provenance, licensing, and derivation notes
 - `CHANGELOG.md` — notable changes
+- `AGENTS.md` — durable project and contributor instructions
 
 ## License and attribution
 

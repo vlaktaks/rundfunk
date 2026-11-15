@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  path_instructions:
+    - path: "**/*"
+      instructions: |
+        Review for correctness, maintainability, security, and regression risk.
+        Ensure changes follow AGENTS.md: native Omarchy theme conventions, no unverified
+        asset redistribution, no destructive/unrequested system changes, accurate docs/changelog,
+        and preserved install/theme-switch safety.
+    - path: "backgrounds/**"
+      instructions: |
+        Verify wallpaper/intro assets are documented in ASSETS.md with source, license,
+        redistribution rights, and attribution notes. Flag missing or unclear provenance.
+    - path: ".github/workflows/**"
+      instructions: |
+        Check least-privilege permissions, pinned action versions, and deterministic CI behavior.
+chat:
+  auto_reply: true

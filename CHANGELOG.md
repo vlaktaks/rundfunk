@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Removed
+- Removed `hyprland.lua`; Omarchy regenerates Hyprland configuration from `colors.toml` and does not use Lua files from Git-installed themes, so the file never took effect. Removed the related references from `AGENTS.md`, `ASSETS.md`, and `README.md`.
+
 ### Fixed
 - Restored `AGENTS.md` reference in `README.md` to satisfy repository documentation consistency checks in CI.
 

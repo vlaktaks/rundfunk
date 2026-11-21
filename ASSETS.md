@@ -61,7 +61,7 @@ Project code/configuration is MIT-licensed (see `LICENSE`). Media assets are doc
 - `preview.png` — root README preview and source for unlock preview asset.
 - `preview-unlock.png` — unlock/lock-screen preview asset (faithful copy of `preview.png` for native Omarchy theme convention).
 - `unlock.png` — theme unlock artwork asset.
-- Theme configuration and metadata files (`colors.toml`, `hyprland.lua`, `shell.toml`, `icons.theme`, `keyboard.rgb`, etc.) — original project assets under repository license unless noted.
+- Theme configuration and metadata files (`colors.toml`, `shell.toml`, `icons.theme`, `keyboard.rgb`, etc.) — original project assets under repository license unless noted.
 
 ## Verification checklist
 

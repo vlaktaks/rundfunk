@@ -19,14 +19,14 @@ omarchy-theme-install https://github.com/vlaktaks/rundfunk.git
 
 `omarchy-theme-install` clones the theme into `~/.config/omarchy/themes/rundfunk` and applies it. This is the supported, standard Git-based installation path for Rundfunk.
 
-> **Omarchy 4.5 note (git-installed themes):** when a theme is installed from a Git repository, Omarchy 4.5 stages theme files selectively and does not stage executable Lua files or certain bundled terminal/VS Code config files from repo-installed themes (`hyprland.lua`, `*.lua`, `alacritty.toml`, `foot.ini`, `ghostty.conf`, `kitty.conf`, `vscode.json`). As a result, Rundfunk's bundled `hyprland.lua` window-behavior overrides (including inactive opacity and custom shadow/blur tuning) are not applied by the standard git-install path on 4.5. Relevant window and shell border colors are still applied via supported, theme-scoped `colors.toml` and `shell.toml` tokens/templates, and palette, shell surfaces, backgrounds, native intro files, icons, keyboard color, preview/unlock assets, and Omarchy-generated themed configs remain available through supported theme mechanisms. If you specifically want the bundled `hyprland.lua` window-behavior overrides on 4.5, use a local user-owned copy of the theme directory (without `.git`) and apply it with `omarchy theme set rundfunk`; this is an optional local workaround, not required for normal theme use. Do not modify internal Omarchy scripts or disable Omarchy protections.
+> **Omarchy 4.5 note (git-installed themes):** when a theme is installed from a Git repository, Omarchy 4.5 stages theme files selectively and does not use executable Lua files or certain bundled terminal/VS Code config files from repo-installed themes (`*.lua`, `alacritty.toml`, `foot.ini`, `ghostty.conf`, `kitty.conf`, `vscode.json`). Rundfunk therefore ships only supported theme mechanisms: `colors.toml` and `shell.toml` tokens/templates, backgrounds and native intros, icons, keyboard color, preview/unlock assets, and Omarchy-generated themed configs. Do not modify internal Omarchy scripts or disable Omarchy protections.
 
 ## Features
 
 - **Dark graphite/charcoal base** with restrained neon accents (cyan, red, magenta) — not purple-heavy.
 - **Sixteen bundled 4K static wallpapers** (`backgrounds/*.jpg`, 3840×2160) selectable through Omarchy's normal wallpaper mechanism (three previously included pairs removed after owner testing).
 - **Native theme-switch intro animations:** matching one-time reveal videos in `backgrounds/intros/*.mp4` (same filename stems) for Omarchy 4.5's native intro flow. Intros play once on eligible theme-switch events, resolve into the corresponding static wallpaper, and stop (no continuously animated desktop wallpapers).
-- **Window and theme borders:** uniform **1px** borders (where natively configurable), with Rundfunk gold `#D6B45A` applied to relevant active/inactive window-border and shell surface/menu border tokens via supported theme-scoped configuration (`colors.toml`, `shell.toml` including explicit `border-width = 1`) where supported; `hyprland.lua` provides matching window-behavior overrides when applied from a local, non-git theme copy on 4.5.
+- **Window and theme borders:** uniform **1px** borders (where natively configurable), with Rundfunk gold `#D6B45A` applied to relevant active/inactive window-border and shell surface/menu border tokens via supported theme-scoped configuration (`colors.toml`, `shell.toml` including explicit `border-width = 1`) where supported.
 - **JetBrainsMono Nerd Font** preferred in supported terminal/editor theme outputs.
 - **Keyboard backlight:** subtle cyan (`keyboard.rgb`).
 - **Icons:** `Yaru-magenta` (installed by Omarchy by default).
@@ -147,7 +147,7 @@ rm -rf ~/.config/omarchy/themes/rundfunk
 
 - **Target:** Omarchy 4.5 (inspected against local `/usr/share/omarchy` implementation and runtime-tested in controlled local sessions).
 - **Future versions:** designed to prefer stable, supported theme interfaces; not claimed compatible with untested releases.
-- **Git-installed theme staging (4.5):** `omarchy-theme-set` treats themes with a `.git` directory in `~/.config/omarchy/themes/<name>` as repo-installed and does not stage `*.lua` files or `alacritty.toml`, `foot.ini`, `ghostty.conf`, `kitty.conf`, `vscode.json`. Rundfunk's `hyprland.lua` window-behavior overrides therefore cannot be applied through the standard git-install path on 4.5. Relevant window/shell border colors are still themed via supported, theme-scoped `colors.toml` and `shell.toml` tokens/templates; backgrounds, intro files, icons, previews/unlock assets, and generated themed outputs are staged/applied normally.
+- **Git-installed theme staging (4.5):** `omarchy-theme-set` treats themes with a `.git` directory in `~/.config/omarchy/themes/<name>` as repo-installed and does not use `*.lua` files or `alacritty.toml`, `foot.ini`, `ghostty.conf`, `kitty.conf`, `vscode.json`. Rundfunk ships no such overrides; window/shell border colors are themed via supported, theme-scoped `colors.toml` and `shell.toml` tokens/templates, and backgrounds, intro files, icons, previews/unlock assets, and generated themed outputs are staged/applied normally.
 - **Extra-theme updates:** native updates use `omarchy-theme-update`/Update → Extra Themes (`git pull` per Git-installed extra theme). Local modifications in the installed theme directory can prevent clean pulls; keep installed themes clean for smooth updates.
 - **Fresh-install default wallpaper:** `16-ember-haze.jpg` is the preferred default for fresh installs. On Omarchy 4.5, when no remembered per-theme selection exists, the initial fallback background is selected by sorted background filename (`choose_theme_background` → first sorted file). With existing filenames preserved (not renumbered/renamed), the lexicographically first remaining wallpaper is currently `10-abyssal-current.jpg`. No supported, theme-scoped native mechanism was identified to override this without renaming/duplicating assets, modifying Omarchy internals, or adding hooks; existing users' remembered wallpaper selections are always preserved.
 - **Runtime verification:** mechanism-level checks confirmed discovery, activation, repeated switching, all sixteen static wallpapers selectable, and correct native intro-file resolution/playback execution and completion evidence for all sixteen remaining pairs in controlled theme switches. Actual on-screen intro visibility, seamless final-frame handoff, 1px gold border/menu/topbar appearance, and some visual/app/lock behaviors require owner visual confirmation and are not claimed as fully verified. Border-thickness correction was applied in theme-scoped `shell.toml` (`border-width = 1` on relevant surfaces) after identifying fallback surface border widths (~`Style.space(2)`) as the cause of thicker menu/popup-style borders. Visual verification not performed.
@@ -158,7 +158,7 @@ rm -rf ~/.config/omarchy/themes/rundfunk
 - **Theme not listed after install:** ensure the directory exists at `~/.config/omarchy/themes/rundfunk` and re-run `omarchy-theme-install` or `omarchy theme set rundfunk`.
 - **Wallpaper not changing:** confirm files exist in `~/.local/state/omarchy/current/theme/backgrounds/` and try `omarchy-theme-bg-set <path>`.
 - **No intro animation:** confirm background intros and animations are enabled, compositor/shell is ready, the selected wallpaper has a matching file in `backgrounds/intros/`, and test via a full theme switch away/from Rundfunk (not just a wallpaper change).
-- **Border/window behavior differs on git install:** expected on Omarchy 4.5 due to git-theme staging restrictions; see compatibility notes above.
+- **Window decoration differs from screenshots:** corner rounding, opacity, shadows, and blur come from Omarchy's own Hyprland configuration, not from this theme; see compatibility notes above.
 
 ## Screenshots
 
@@ -168,7 +168,6 @@ Additional runtime screenshots captured during local validation are available in
 
 - `colors.toml` — core palette and template color keys
 - `shell.toml` — shell/surface styling overrides (bar layout preserved)
-- `hyprland.lua` — Hyprland window/decoration overrides (local non-git application on 4.5)
 - `keyboard.rgb` — keyboard backlight color
 - `icons.theme` — preferred icon theme
 - `backgrounds/` — sixteen static selectable wallpapers
